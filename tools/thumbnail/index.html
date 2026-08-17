@@ -3,25 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Thumbnail Maker – CreatorForge AI</title>
+    <title>YouTube Thumbnail Maker – Free Online Thumbnail Editor | CreatorForge AI</title>
+    <meta name="description" content="Create professional YouTube thumbnails with CreatorForge AI. Add text, images, shapes, templates and export your thumbnail as PNG or JPG.">
+    <meta name="keywords" content="YouTube thumbnail maker, thumbnail editor, free thumbnail generator, online design tool, creator tools">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0F172A">
+    
+    <!-- Canonical & Base Metadata -->
+    <link rel="canonical" href="https://YOUR-DOMAIN.com/tools/thumbnail/">
+    <meta property="og:title" content="YouTube Thumbnail Maker – CreatorForge AI">
+    <meta property="og:description" content="Design eye-catching YouTube thumbnails in 1280x720 instantly in your browser.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@400;600;800&family=Montserrat:wght@400;700;900&family=Oswald:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Base Platform Stylesheets -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/components.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <!-- Standalone Editor Stylesheet -->
+    <link rel="stylesheet" href="thumbnail.css">
+
+    <!-- Fabric.js CDN (Stable pinned release for client-side editing) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../../index.html" class="brand-logo">
-                <span class="logo-text">CreatorForge <span class="accent-text">AI</span></span>
+<body class="editor-body-lock">
+
+    <!-- Global App Header / Topbar -->
+    <header class="editor-topbar">
+        <div class="topbar-left">
+            <a href="../../index.html" class="brand-logo" title="Back to Homepage">
+                <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+                    <path d="M10 22L16 10L22 22H10Z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
+                    <circle cx="16" cy="18" r="2" fill="#38BDF8"/>
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#6366F1"/>
+                            <stop offset="1" stop-color="#06B6D4"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text hide-mobile">CreatorForge <span class="accent-text">AI</span></span>
             </a>
-            <a href="../../index.html" class="btn btn-secondary btn-sm">&larr; Back to Home</a>
+            <div class="topbar-divider hide-mobile"></div>
+            <div class="history-controls">
+                <button id="undoBtn" class="icon-btn" aria-label="Undo action" title="Undo (Ctrl+Z)" disabled>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+                </button>
+                <button id="redoBtn" class="icon-btn" aria-label="Redo action" title="Redo (Ctrl+Y)" disabled>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="topbar-center hide-mobile">
+            <span class="canvas-dimensions-badge">1280 × 720 px</span>
+            <div class="zoom-controls">
+                <button id="zoomOutBtn" class="icon-btn-sm" aria-label="Zoom out" title="Zoom Out">-</button>
+                <span id="zoomVal">100%</span>
+                <button id="zoomInBtn" class="icon-btn-sm" aria-label="Zoom in" title="Zoom In">+</button>
+                <button id="zoomFitBtn" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Fit</button>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button id="previewBtn" class="btn btn-secondary">Preview</button>
+            <div class="export-dropdown-wrapper">
+                <button id="exportDropdownBtn" class="btn btn-primary">Download &#9662;</button>
+                <div id="exportMenu" class="export-menu hidden">
+                    <button id="downloadPngBtn" class="export-opt">Download PNG (High Res)</button>
+                    <button id="downloadJpgBtn" class="export-opt">Download JPG (Standard)</button>
+                </div>
+            </div>
         </div>
     </header>
-    <main class="container" style="padding: 6rem 1.5rem; text-align: center;">
-        <div class="badge">Phase 2 Module</div>
-        <h1 style="font-size: 2.5rem; margin-top: 1rem;">YouTube Thumbnail Maker</h1>
-        <p style="color: var(--text-muted); margin-top: 1rem;">The functional interactive editor for this tool is scheduled for implementation in Phase 2.</p>
-        <a href="../../index.html" class="btn btn-primary" style="margin-top: 2rem;">Return to Homepage</a>
-    </main>
-</body>
-</html>
+
+    <!-- Main Workspace App Workspace Container -->
+    <div class="editor-workspace">
+
+        <!-- Left Toolbar (Tool categories) -->
+        <aside class="left-toolbar" id="leftToolbar">
+            <button class="tool-tab active" data-panel="templatesPanel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <span>Templates</span>
+            </button>
+            <button class="tool-tab" data-panel="textPanel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                <span>Text</span>
+            </button>
+            <button class="tool-tab" data-panel="imagePanel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Images</span>
+            </button>
+            <button class="tool-tab" data-panel="shapesPanel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><rect x="8" y="8" width="8" height="8"/></svg>
+                <span>Shapes</span>
+            </button>
+            <button class="tool-tab" data-panel="backgroundPanel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>Background</span>
+            </button>
+            <button class="tool-tab" data-panel="layersPanel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polygon points="2 17 12 22 22 17"/><polygon points="2 12 12 17 22 12"/></svg>
+                <span>Layers</span>
+            </button>
+        </aside>
+
+        <!-- Dynamic Drawer / Subpanels -->
+        <div class="tool-drawer" id="toolDrawer">
+            <!-- Templates Drawer Panel -->
+            <div class="drawer-panel active" id="templatesPanel">
+                <h3>Thumbnail Templates</h3>
+                <p class="drawer-desc">Click a template to load directly onto canvas.</p>
+                <div class="templates-list" id="templatesList"></div>
+            </div>
+
+            <!-- Text Drawer Panel -->
+            <div class="drawer-panel" id="textPanel">
+                <h3>Add Text</h3>
+                <p class="drawer-desc">Click to insert custom typography elements.</p>
+                <div class="text-preset-buttons">
+                    <button id="addHeadingBtn" class="text-btn btn-heading">Add Heading</button>
+                    <button id="addSubheadingBtn" class="text-btn btn-subheading">Add Subheading</button>
+                    <button id="addBodyTextBtn" class="text-btn btn-body">Add Body Text</button>
+                </div>
+            </div>
+
+            <!-- Image Drawer Panel -->
+            <div class="drawer-panel" id="imagePanel">
+                <h3>Upload Image</h3>
+                <p class="drawer-desc">PNG, JPG, WEBP formats supported.</p>
+                <label class="upload-dropzone">
+                    <input type="file" id="imageUploadInput" accept="image/png, image/jpeg, image/webp" hidden>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>Choose File or Drag Here</span>
+                </label>
+            </div>
+
+            <!-- Shapes Drawer Panel -->
+            <div class="drawer-panel" id="shapesPanel">
+                <h3>Add Vector Shape</h3>
+                <div class="shapes-grid">
+                    <button class="shape-item-btn" data-shape="rect">Rectangle</button>
+                    <button class="shape-item-btn" data-shape="circle">Circle</button>
+                    <button class="shape-item-btn" data-shape="roundRect">Rounded</button>
+                    <button class="shape-item-btn" data-shape="triangle">Triangle</button>
+                    <button class="shape-item-btn" data-shape="arrow">Arrow</button>
+                </div>
+            </div>
+
+            <!-- Background Drawer Panel -->
+            <div class="drawer-panel" id="backgroundPanel">
+                <h3>Canvas Background</h3>
+                <div class="control-group">
+                    <label>Solid Color</label>
+                    <input type="color" id="bgColorPicker" value="#0f172a" class="color-picker-input">
+                </div>
+                <div class="control-group">
+                    <label>Preset Gradients</label>
+                    <div class="gradient-presets">
+                        <button class="grad-btn" data-grad="linear-gradient(135deg, #1e1b4b, #312e81)" style="background: linear-gradient(135deg, #1e1b4b, #312e81);"></button>
+                        <button class="grad-btn" data-grad="linear-gradient(135deg, #064e3b, #10b981)" style="background: linear-gradient(135deg, #064e3b, #10b981);"></button>
+                        <button class="grad-btn" data-grad="linear-gradient(135deg, #833ab4, #fd1d1d)" style="background: linear-gradient(135deg, #833ab4, #fd1d1d);"></button>
+                        <button class="grad-btn" data-grad="linear-gradient(135deg, #0f172a, #0284c7)" style="background: linear-gradient(135deg, #0f172a, #0284c7);"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layers Drawer Panel -->
+            <div class="drawer-panel" id="layersPanel">
+                <h3>Layers</h3>
+                <div class="layers-stack" id="layersStackList"></div>
+            </div>
+        </div>
+
+        <!-- Center Interactive Stage -->
+        <main class="canvas-stage" id="canvasStage">
+            <div class="canvas-wrapper-outer">
+                <canvas id="thumbnailCanvas"></canvas>
+            </div>
+        </main>
+
+        <!-- Right Side Properties Inspector Panel -->
+        <aside class="right-properties-panel" id="propertiesPanel">
+            <div class="panel-header">
+                <h3>Inspector Properties</h3>
+                <button id="deleteElementBtn" class="icon-btn Danger-btn" title="Delete selected (Delete / Backspace)" aria-label="Delete element">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+            </div>
+
+            <div id="noSelectionMsg" class="no-selection-msg">
+                <p>Select an element on the canvas to inspect and edit properties.</p>
+            </div>
+
+            <!-- Dynamic Property Controls Wrapper -->
+            <div id="activeControlsWrapper" class="active-controls hidden">
+                
+                <!-- Universal Controls -->
+                <div class="property-block">
+                    <label>Arrangement & Actions</label>
+                    <div class="btn-grid-4">
+                        <button id="bringForwardBtn" class="btn btn-secondary btn-sm" title="Bring Forward">Forward</button>
+                        <button id="sendBackwardBtn" class="btn btn-secondary btn-sm" title="Send Backward">Backward</button>
+                        <button id="bringToFrontBtn" class="btn btn-secondary btn-sm" title="Bring to Front">Front</button>
+                        <button id="sendToBackBtn" class="btn btn-secondary btn-sm" title="Send to Back">Back</button>
+                    </div>
+                    <div class="btn-grid-2" style="margin-top: 0.5rem;">
+                        <button id="duplicateElementBtn" class="btn btn-secondary btn-sm">Duplicate</button>
+                    </div>
+                </div>
+
+                <div class="property-block">
+                    <label>Opacity (<span id="opacityVal">100%</span>)</label>
+                    <input type="range" id="opacityInput" min="0" max="1" step="0.05" value="1" class="slider">
+                </div>
+
+                <!-- Text Specific Controls -->
+                <div id="textControls" class="property-block hidden">
+                    <label>Typography</label>
+                    <select id="fontFamilySelect" class="select-input">
+                        <option value="Inter">Inter</option>
+                        <option value="Anton">Anton</option>
+                        <option value="Bebas Neue">Bebas Neue</option>
+                        <option value="Oswald">Oswald</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Poppins">Poppins</option>
+                    </select>
+
+                    <div class="flex-row" style="margin-top: 0.5rem;">
+                        <input type="number" id="fontSizeInput" min="8" max="250" value="40" class="num-input">
+                        <input type="color" id="textColorPicker" value="#ffffff" class="color-picker-input">
+                    </div>
+
+                    <div class="btn-row" style="margin-top: 0.5rem;">
+                        <button id="boldToggleBtn" class="toggle-btn" title="Toggle Bold"><b>B</b></button>
+                        <button id="italicToggleBtn" class="toggle-btn" title="Toggle Italic"><i>I</i></button>
+                        <button id="alignLeftBtn" class="toggle-btn" title="Align Left">&#8676;</button>
+                        <button id="alignCenterBtn" class="toggle-btn" title="Align Center">&#8644;</button>
+                        <button id="alignRightBtn" class="toggle-btn" title="Align Right">&#8677;</button>
+                    </div>
+
+                    <label style="margin-top: 1rem;">Text Outline (Stroke)</label>
+                    <div class="flex-row">
+                        <input type="color" id="strokeColorPicker" value="#000000" class="color-picker-input">
+                        <input type="number" id="strokeWidthInput" min="0" max="20" value="0" class="num-input">
+                    </div>
+
+                    <label style="margin-top: 1rem;">Text Drop Shadow</label>
+                    <div class="flex-row">
+                        <input type="color" id="shadowColorPicker" value="#000000" class="color-picker-input">
+                        <input type="number" id="shadowBlurInput" min="0" max="50" value="0" class="num-input" placeholder="Blur">
+                    </div>
+                </div>
+
+                <!-- Image Specific Controls -->
+                <div id="imageControls" class="property-block hidden">
+                    <label>Image Transformations</label>
+                    <div class="btn-grid-2">
+                        <button id="flipHBtn" class="btn btn-secondary btn-sm">Flip H</button>
+                        <button id="flipVBtn" class="btn btn-secondary btn-sm">Flip V</button>
+                    </div>
+                    <label style="margin-top: 0.75rem;">Rotation Angle</label>
+                    <input type="range" id="rotationInput" min="0" max="360" value="0" class="slider">
+                </div>
+
+                <!-- Shape Specific Controls -->
+                <div id="shapeControls" class="property-block hidden">
+                    <label>Shape Fill & Border</label>
+                    <div class="flex-row">
+                        <label class="lbl-sm">Fill</label>
+                        <input type="color" id="shapeFillPicker" value="#6366f1" class="color-picker-input">
+                    </div>
+                    <div class="flex-row" style="margin-top: 0.5rem;">
+                        <label class="lbl-sm">Border</label>
+                        <input type="color" id="shapeBorderPicker" value="#ffffff" class="color-picker-input">
+                        <input type="number" id="shapeBorderWidthInput" min="0" max="30" value="0" class="num-input">
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+
+    <!-- Status Bar -->
+    <footer class="editor-statusbar">
+        <span>Target Sizing: 1280 × 720 (16:9 HD Canvas)</span>
+        <span id="activeSelectionStatus">Selected: None</span>
+    </footer>
+
+    <!-- Fullscreen Preview Overlay Modal -->
+    <div id="previewModal" class="preview-modal hidden">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h3>Thumbnail Preview</h3>
+                <button id="closePreviewBtn" class="icon-btn">&times;</button>
+            </div>
+            <div class="preview-image-holder">
+                <img id="previewImg" src="" alt="Thumbnail Preview">
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Message Box -->
+    <div id="toastNotification" class="toast hidden"></div>
+
+    <!-- Detailed Introductory & FAQ Section (SEO Optimized) -->
+    <article class="editor-seo-article container">
+        <h1>YouTube Thumbnail Maker</h1>
+        <p>CreatorForge AI YouTube Thumbnail Maker lets content creators design 1280 × 720 thumbnails locally in the browser. Customize bold text outlines, high-contrast imagery, background gradients, and vector shapes to optimize video click-through rates (CTR).</p>
+
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-accordion" style="margin-top: 1.5rem;">
+            <div class="faq-item">
+                <button class="faq-question">What size should a YouTube thumbnail be? <span class="faq-icon">+</span></button>
+                <div class="faq-answer">
+                    <p>Standard YouTube thumbnails require an aspect ratio of 16:9 with specific dimensions of 1280 × 720 pixels and a minimum width of 640 pixels.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Can I create a YouTube thumbnail on mobile? <span class="faq-icon">+</span></button>
+                <div class="faq-answer">
+                    <p>Yes. CreatorForge AI's editor is designed to adapt to touch controls and smartphone viewports.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Can I download my thumbnail as PNG or JPG? <span class="faq-icon">+</span></button>
+                <div class="faq-answer">
+                    <p>Yes. You can export directly to PNG (lossless high quality) or JPG formats without watermark restrictions.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Can I add custom images? <span class="faq-icon">+</span></butt
