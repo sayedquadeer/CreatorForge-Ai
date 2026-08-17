@@ -1,27 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Post Maker – CreatorForge AI</title>
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Post Maker – Create Posts Online | CreatorForge AI</title>
+  <meta name="description" content="Create professional social media posts with CreatorForge AI. Design Instagram, Facebook, X, LinkedIn and YouTube Community posts with an easy online editor.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;700;800&family=Oswald:wght@500;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Fabric.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="social-post.css">
 </head>
-<body>
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../../index.html" class="brand-logo">
-                <span class="logo-text">CreatorForge <span class="accent-text">AI</span></span>
-            </a>
-            <a href="../../index.html" class="btn btn-secondary btn-sm">&larr; Back to Home</a>
+<body class="social-post-body">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="editor-header">
+    <div class="header-left">
+      <a href="../../index.html" class="brand-logo" aria-label="CreatorForge AI Home">
+        <i class="fa-solid fa-wand-magic-sparkles logo-icon"></i>
+        <span>CreatorForge <strong class="accent-text">AI</strong></span>
+      </a>
+      <span class="tool-title-badge">Social Post Maker</span>
+    </div>
+
+    <div class="header-center">
+      <div class="preset-selector-wrapper">
+        <label for="formatPresetSelect" class="sr-only">Select Preset Format</label>
+        <select id="formatPresetSelect" class="preset-dropdown" title="Change Social Media Format">
+          <option value="insta_square">Instagram Square (1080×1080, 1:1)</option>
+          <option value="insta_portrait">Instagram Portrait (1080×1350, 4:5)</option>
+          <option value="insta_story">Instagram Story (1080×1920, 9:16)</option>
+          <option value="facebook_post">Facebook Post (1200×630, 1.91:1)</option>
+          <option value="x_post">X / Twitter Post (1600×900, 16:9)</option>
+          <option value="linkedin_post">LinkedIn Post (1200×627, 1.91:1)</option>
+          <option value="yt_community">YouTube Community (1200×675, 16:9)</option>
+        </select>
+      </div>
+
+      <div class="history-controls">
+        <button id="undoBtn" class="btn-icon" title="Undo (Ctrl+Z)" aria-label="Undo action" disabled>
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button id="redoBtn" class="btn-icon" title="Redo (Ctrl+Y)" aria-label="Redo action" disabled>
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+
+      <div class="zoom-controls">
+        <button id="zoomOutBtn" class="btn-icon" title="Zoom Out" aria-label="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+        <span id="zoomLevelText">100%</span>
+        <button id="zoomInBtn" class="btn-icon" title="Zoom In" aria-label="Zoom In"><i class="fa-solid fa-plus"></i></button>
+        <button id="zoomFitBtn" class="btn-icon" title="Fit to Screen" aria-label="Fit to Screen"><i class="fa-solid fa-expand"></i></button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button id="previewBtn" class="btn btn-secondary">
+        <i class="fa-solid fa-eye"></i> Preview
+      </button>
+      <div class="export-dropdown-wrapper">
+        <button id="exportDropdownBtn" class="btn btn-primary">
+          <i class="fa-solid fa-download"></i> Download <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div id="exportMenu" class="export-menu hidden">
+          <button id="downloadPngBtn" class="export-item">
+            <i class="fa-solid fa-file-image"></i> Download PNG
+          </button>
+          <button id="downloadJpgBtn" class="export-item">
+            <i class="fa-solid fa-file-jpeg"></i> Download JPG
+          </button>
         </div>
-    </header>
-    <main class="container" style="padding: 6rem 1.5rem; text-align: center;">
-        <div class="badge">Phase 2 Module</div>
-        <h1 style="font-size: 2.5rem; margin-top: 1rem;">Social Media Post Maker</h1>
-        <p style="color: var(--text-muted); margin-top: 1rem;">The canvas social post engine is scheduled for implementation in Phase 2.</p>
-        <a href="../../index.html" class="btn btn-primary" style="margin-top: 2rem;">Return to Homepage</a>
-    </main>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN EDITOR WORKSPACE -->
+  <main class="editor-container">
+    <!-- LEFT NAVIGATION TOOLBAR -->
+    <nav class="sidebar-tabs" aria-label="Editor Panels">
+      <button class="tab-btn active" data-panel="templatesPanel" title="Templates">
+        <i class="fa-solid fa-grip"></i>
+        <span>Templates</span>
+      </button>
+      <button class="tab-btn" data-panel="textPanel" title="Text">
+        <i class="fa-solid fa-font"></i>
+        <span>Text</span>
+      </button>
+      <button class="tab-btn" data-panel="imagesPanel" title="Images">
+        <i class="fa-solid fa-image"></i>
+        <span>Images</span>
+      </button>
+      <button class="tab-btn" data-panel="shapesPanel" title="Shapes">
+        <i class="fa-solid fa-shapes"></i>
+        <span>Shapes</span>
+      </button>
+      <button class="tab-btn" data-panel="bgPanel" title="Background">
+        <i class="fa-solid fa-paint-roller"></i>
+        <span>Background</span>
+      </button>
+      <button class="tab-btn" data-panel="layersPanel" title="Layers">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>Layers</span>
+      </button>
+    </nav>
+
+    <!-- LEFT SIDEBAR CONTENT PANELS -->
+    <aside class="sidebar-content">
+      <!-- TEMPLATES PANEL -->
+      <section id="templatesPanel" class="panel-section active">
+        <h3>Templates</h3>
+        <p class="panel-desc">Select an original design to customize</p>
+        <div class="template-filter-bar">
+          <select id="templateCategorySelect">
+            <option value="all">All Categories</option>
+            <option value="Instagram">Instagram</option>
+            <option value="Business">Business</option>
+            <option value="Motivational">Motivational</option>
+            <option value="Technology">Technology</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Education">Education</option>
+            <option value="Creator">Creator</option>
+            <option value="Promotional">Promotional</option>
+          </select>
+        </div>
+        <div id="templatesGrid" class="templates-grid"></div>
+      </section>
+
+      <!-- TEXT PANEL -->
+      <section id="textPanel" class="panel-section">
+        <h3>Text Elements</h3>
+        <p class="panel-desc">Click to add customizable typography</p>
+        <button id="addHeadingBtn" class="btn btn-outline text-add-btn head-btn">Add Headline</button>
+        <button id="addSubheadingBtn" class="btn btn-outline text-add-btn sub-btn">Add Subheading</button>
+        <button id="addBodyTextBtn" class="btn btn-outline text-add-btn body-btn">Add Body Text</button>
+      </section>
+
+      <!-- IMAGES PANEL -->
+      <section id="imagesPanel" class="panel-section">
+        <h3>Upload Image</h3>
+        <p class="panel-desc">Supports PNG, JPG, JPEG, WEBP</p>
+        <div class="upload-dropzone" id="uploadDropzone">
+          <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+          <span>Click or Drag & Drop</span>
+          <input type="file" id="imageFileInput" accept="image/png, image/jpeg, image/webp" hidden>
+        </div>
+      </section>
+
+      <!-- SHAPES PANEL -->
+      <section id="shapesPanel" class="panel-section">
+        <h3>Add Shapes</h3>
+        <div class="shapes-grid">
+          <button class="shape-card" data-shape="rect" title="Rectangle">
+            <i class="fa-regular fa-square"></i>
+            <span>Rectangle</span>
+          </button>
+          <button class="shape-card" data-shape="rounded-rect" title="Rounded Rectangle">
+            <i class="fa-solid fa-vector-square"></i>
+            <span>Rounded</span>
+          </button>
+          <button class="shape-card" data-shape="circle" title="Circle">
+            <i class="fa-regular fa-circle"></i>
+            <span>Circle</span>
+          </button>
+          <button class="shape-card" data-shape="triangle" title="Triangle">
+            <i class="fa-solid fa-play fa-rotate-270"></i>
+            <span>Triangle</span>
+          </button>
+          <button class="shape-card" data-shape="arrow" title="Arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+            <span>Arrow</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- BACKGROUND PANEL -->
+      <section id="bgPanel" class="panel-section">
+        <h3>Canvas Background</h3>
+        <div class="control-group">
+          <label for="bgColorPicker">Solid Color</label>
+          <input type="color" id="bgColorPicker" value="#121826">
+        </div>
+        <div class="control-group">
+          <label>Presets</label>
+          <div class="bg-presets">
+            <button class="bg-preset-btn" style="background: #121826;" data-color="#121826"></button>
+            <button class="bg-preset-btn" style="background: #ffffff;" data-color="#ffffff"></button>
+            <button class="bg-preset-btn" style="background: #0f172a;" data-color="#0f172a"></button>
+            <button class="bg-preset-btn" style="background: #4c1d95;" data-color="#4c1d95"></button>
+            <button class="bg-preset-btn" style="background: #831843;" data-color="#831843"></button>
+            <button class="bg-preset-btn" style="background: #064e3b;" data-color="#064e3b"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LAYERS PANEL -->
+      <section id="layersPanel" class="panel-section">
+        <h3>Layer Management</h3>
+        <ul id="layersList" class="layers-list">
+          <li class="empty-layers">No elements on canvas</li>
+        </ul>
+      </section>
+    </aside>
+
+    <!-- CENTER CANVAS DISPLAY -->
+    <section class="canvas-viewport" id="canvasViewport">
+      <div class="canvas-card" id="canvasCard">
+        <canvas id="postCanvas"></canvas>
+      </div>
+    </section>
+
+    <!-- RIGHT PROPERTIES PANEL -->
+    <aside class="properties-panel" id="propertiesPanel">
+      <div class="properties-header">
+        <h3 id="propPanelTitle">Canvas Settings</h3>
+        <button id="closeMobilePropBtn" class="btn-icon mobile-only" aria-label="Close Properties">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- NO SELECTION -->
+      <div id="noSelectionProps" class="prop-group">
+        <p class="panel-desc">Select an object on the canvas to inspect and modify properties.</p>
+        <div class="info-badge">
+          <i class="fa-solid fa-circle-info"></i>
+          <span id="canvasDimInfo">Preset: 1080 × 1080 px</span>
+        </div>
+      </div>
+
+      <!-- TEXT PROPERTIES -->
+      <div id="textProps" class="prop-group hidden">
+        <div class="control-group">
+          <label for="fontFamilySelect">Font Family</label>
+          <select id="fontFamilySelect">
+            <option value="Inter">Inter</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Oswald">Oswald</option>
+            <option value="Bebas Neue">Bebas Neue</option>
+            <option value="Anton">Anton</option>
+          </select>
+        </div>
+
+        <div class="control-row">
+          <div class="control-group">
+            <label for="fontSizeInput">Size</label>
+            <input type="number" id="fontSizeInput" min="8" max="300" value="48">
+          </div>
+          <div class="control-group">
+            <label>Styles</label>
+            <div class="btn-group">
+              <button id="btnBold" class="btn-toggle" title="Bold"><i class="fa-solid fa-bold"></i></button>
+              <button id="btnItalic" class="btn-toggle" title="Italic"><i class="fa-solid fa-italic"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Alignment</label>
+          <div class="btn-group">
+            <button id="btnAlignLeft" class="btn-toggle" title="Left"><i class="fa-solid fa-align-left"></i></button>
+            <button id="btnAlignCenter" class="btn-toggle" title="Center"><i class="fa-solid fa-align-center"></i></button>
+            <button id="btnAlignRight" class="btn-toggle" title="Right"><i class="fa-solid fa-align-right"></i></button>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <div class="control-group">
+            <label for="textColorPicker">Text Color</label>
+            <input type="color" id="textColorPicker" value="#ffffff">
+          </div>
+          <div class="control-group">
+            <label for="strokeColorPicker">Stroke</label>
+            <input type="color" id="strokeColorPicker" value="#000000">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="strokeWidthInput">Stroke Width</label>
+          <input type="range" id="strokeWidthInput" min="0" max="20" value="0">
+        </div>
+
+        <div class="control-group">
+          <label for="opacityInputText">Opacity</label>
+          <input type="range" id="opacityInputText" min="0" max="1" step="0.05" value="1">
+        </div>
+      </div>
+
+      <!-- IMAGE PROPERTIES -->
+      <div id="imageProps" class="prop-group hidden">
+        <div class="control-row">
+          <button id="btnFlipX" class="btn btn-outline"><i class="fa-solid fa-arrows-left-right"></i> Flip H</button>
+          <button id="btnFlipY" class="btn btn-outline"><i class="fa-solid fa-arrows-up-down"></i> Flip V</button>
+        </div>
+        <div class="control-group">
+          <label for="opacityInputImage">Opacity</label>
+          <input type="range" id="opacityInputImage" min="0" max="1" step="0.05" value="1">
+        </div>
+        <div class="control-group">
+          <label for="rotationInputImage">Rotation (°)</label>
+          <input type="number" id="rotationInputImage" min="0" max="360" value="0">
+        </div>
+      </div>
+
+      <!-- SHAPE PROPERTIES -->
+      <div id="shapeProps" class="prop-group hidden">
+        <div class="control-row">
+          <div class="control-group">
+            <label for="shapeFillPicker">Fill</label>
+            <input type="color" id="shapeFillPicker" value="#3b82f6">
+          </div>
+          <div class="control-group">
+            <label for="shapeBorderPicker">Border</label>
+            <input type="color" id="shapeBorderPicker" value="#ffffff">
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="shapeBorderWidthInput">Border Width</label>
+          <input type="range" id="shapeBorderWidthInput" min="0" max="30" value="0">
+        </div>
+        <div class="control-group">
+          <label for="opacityInputShape">Opacity</label>
+          <input type="range" id="opacityInputShape" min="0" max="1" step="0.05" value="1">
+        </div>
+      </div>
+
+      <!-- COMMON ACTION CONTROLS -->
+      <div id="commonProps" class="prop-group hidden">
+        <hr class="prop-divider">
+        <h4>Layer Actions</h4>
+        <div class="layer-actions-grid">
+          <button id="btnBringForward" class="btn btn-outline" title="Bring Forward"><i class="fa-solid fa-angle-up"></i> Forward</button>
+          <button id="btnSendBackward" class="btn btn-outline" title="Send Backward"><i class="fa-solid fa-angle-down"></i> Backward</button>
+          <button id="btnBringToFront" class="btn btn-outline" title="Bring To Front"><i class="fa-solid fa-angles-up"></i> Front</button>
+          <button id="btnSendToBack" class="btn btn-outline" title="Send To Back"><i class="fa-solid fa-angles-down"></i> Back</button>
+        </div>
+        <div class="control-row action-btns">
+          <button id="btnDuplicate" class="btn btn-outline"><i class="fa-solid fa-copy"></i> Duplicate</button>
+          <button id="btnDelete" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- PREVIEW MODAL -->
+  <div id="previewModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Design Preview</h3>
+        <button id="closePreviewBtn" class="btn-icon" aria-label="Close Preview"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <img id="previewImage" src="" alt="Post Preview">
+      </div>
+      <div class="modal-footer">
+        <button id="previewDownloadPng" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download PNG</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEO CONTENT SECTION -->
+  <footer class="seo-footer-container">
+    <div class="seo-content">
+      <h1>Social Media Post Maker</h1>
+      <p>
+        Design eye-catching posts for Instagram, Facebook, X (Twitter), LinkedIn, and YouTube Community using CreatorForge AI's free online Social Media Post Maker. With custom canvas dimensions, robust typography, native shapes, and customizable templates, you can publish stunning designs without complex graphic software.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl class="faq-list">
+        <dt>What is a social media post maker?</dt>
+        <dd>A browser-based graphics editor designed specifically for creating social media visuals quickly with predefined pixel dimensions and vector elements.</dd>
+
+        <dt>What size should an Instagram post be?</dt>
+        <dd>Instagram supports Square (1080 × 1080 px) and Portrait (1080 × 1350 px) formats, both supported natively in CreatorForge AI.</dd>
+
+        <dt>What size should an Instagram Story be?</dt>
+        <dd>Instagram Stories use a 9:16 aspect ratio at 1080 × 1920 pixels.</dd>
+
+        <dt>Can I create Facebook posts online?</dt>
+        <dd>Yes, choose the Facebook Post preset (1200 × 630 px) to generate optimized graphics directly in your browser.</dd>
+
+        <dt>Can I create LinkedIn posts?</dt>
+        <dd>Yes, select the LinkedIn Post preset (1200 × 627 px) for professional updates.</dd>
+
+        <dt>Can I create social media posts on mobile?</dt>
+        <dd>CreatorForge AI features a fully responsive touch-friendly interface optimized for smartphone screens.</dd>
+
+        <dt>Can I download my design as PNG?</dt>
+        <dd>Yes, you can export high-resolution PNG images with loss-free quality.</dd>
+
+        <dt>Can I download my design as JPG?</dt>
+        <dd>Yes, high-quality JPG downloads are available for lightweight online sharing.</dd>
+      </dl>
+    </div>
+  </footer>
+
+  <!-- MODULE SCRIPTS -->
+  <script src="templates.js"></script>
+  <script src="history.js"></script>
+  <script src="canvas.js"></script>
+  <script src="social-post.js"></script>
 </body>
-</html>
+                                                            </html>
+                                                            
