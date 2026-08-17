@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorForge AI – AI Design Tools for Creators</title>
+    <meta name="description" content="Create YouTube thumbnails, social media posts, and stunning visuals with CreatorForge AI's powerful design tools.">
+    <meta name="keywords" content="AI design, thumbnail maker, background remover, image converter, social media creator">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0F172A">
+    
+    <!-- Canonical & Base URLs (Replace YOUR-DOMAIN.com with your domain or GitHub Pages link) -->
+    <link rel="canonical" href="https://YOUR-DOMAIN.com/">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="CreatorForge AI – AI Design Tools for Creators">
+    <meta property="og:description" content="Create YouTube thumbnails, social media posts, and stunning visuals with CreatorForge AI's powerful design tools.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://YOUR-DOMAIN.com/">
+    <meta property="og:image" content="https://YOUR-DOMAIN.com/assets/og-image.png">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CreatorForge AI – AI Design Tools for Creators">
+    <meta name="twitter:description" content="Create YouTube thumbnails, social media posts, and stunning visuals with CreatorForge AI's powerful design tools.">
+    <meta name="twitter:image" content="https://YOUR-DOMAIN.com/assets/og-image.png">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="./index.html" class="brand-logo">
+                <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+                    <path d="M10 22L16 10L22 22H10Z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
+                    <circle cx="16" cy="18" r="2" fill="#38BDF8"/>
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#6366F1"/>
+                            <stop offset="1" stop-color="#06B6D4"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">CreatorForge <span class="accent-text">AI</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="./index.html" class="nav-link active">Home</a>
+                <a href="#tools" class="nav-link">Tools</a>
+                <a href="#templates" class="nav-link">Templates</a>
+                <a href="#ai-assistant" class="nav-link">AI Tools</a>
+                <a href="./pages/about.html" class="nav-link">About</a>
+                <a href="./tools/thumbnail/index.html" class="btn btn-primary btn-mobile-only">Get Started</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="./tools/thumbnail/index.html" class="btn btn-primary hide-mobile">Get Started</a>
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="badge">
+                        <span class="badge-dot"></span> Next-Gen Content Suite
+                    </div>
+                    <h1 class="hero-title">Create Stunning Content With <span class="text-gradient">CreatorForge AI</span></h1>
+                    <p class="hero-subtitle">Powerful AI-powered design tools for thumbnails, social posts, images, and creators.</p>
+                    <div class="hero-cta-group">
+                        <a href="./tools/thumbnail/index.html" class="btn btn-primary btn-lg">Start Creating</a>
+                        <a href="#tools" class="btn btn-secondary btn-lg">Explore Tools</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="preview-stage">
+                        <div class="preview-glow"></div>
+                        <div class="preview-card mock-editor">
+                            <div class="editor-header">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                                <span class="editor-title">CreatorForge Canvas v1.0</span>
+                            </div>
+                            <div class="editor-body">
+                                <div class="editor-sidebar-mock">
+                                    <div class="tool-dot"></div>
+                                    <div class="tool-dot"></div>
+                                    <div class="tool-dot active"></div>
+                                    <div class="tool-dot"></div>
+                                </div>
+                                <div class="editor-workspace">
+                                    <div class="canvas-element element-1 float-anim">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                        <span>Pro Layout</span>
+                                    </div>
+                                    <div class="canvas-element element-2 glow-anim">
+                                        <span class="sparkle">✨</span> AI Enhancing...
+                                    </div>
+                                    <div class="canvas-main-card">
+                                        <div class="hero-tag">HIGH CTR</div>
+                                        <div class="hero-art-text">EPIC VLOG</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Strip -->
+        <section class="trust-strip">
+            <div class="container trust-container">
+                <div class="trust-item">
+                    <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    <span>Fast & Easy</span>
+                </div>
+                <div class="trust-item">
+                    <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Creator-Focused</span>
+                </div>
+                <div class="trust-item">
+                    <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <span>Browser-Based</span>
+                </div>
+                <div class="trust-item">
+                    <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <span>Free Tools Available</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section class="tools-section" id="tools">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">Everything You Need to Create</h2>
+                    <p class="section-subtitle">Simple creative tools designed for modern content creators.</p>
+                </div>
+                <div class="tools-grid">
+                    <!-- Tool Card 1 -->
+                    <div class="card tool-card">
+                        <div class="tool-icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                        </div>
+                        <h3>YouTube Thumbnail Maker</h3>
+                        <p>Create eye-catching thumbnails for your YouTube videos.</p>
+                        <a href="./tools/thumbnail/index.html" class="btn btn-card">Open Tool &rarr;</a>
+                    </div>
+                    <!-- Tool Card 2 -->
+                    <div class="card tool-card">
+                        <div class="tool-icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        </div>
+                        <h3>Social Media Post Maker</h3>
+                        <p>Design engaging posts for your favorite social platforms.</p>
+                        <a href="./tools/social-post/index.html" class="btn btn-card">Open Tool &rarr;</a>
+                    </div>
+                    <!-- Tool Card 3 -->
+                    <div class="card tool-card">
+                        <div class="tool-icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        </div>
+                        <h3>Background Remover</h3>
+                        <p>Remove image backgrounds and create transparent images.</p>
+                        <a href="./tools/background-remover/index.html" class="btn btn-card">Open Tool &rarr;</a>
+                    </div>
+                    <!-- Tool Card 4 -->
+                    <div class="card tool-card">
+                        <div class="tool-icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                        </div>
+                        <h3>PNG ↔ JPG Converter</h3>
+                        <p>Convert images between PNG and JPG quickly and easily.</p>
+                        <a href="./tools/image-converter/index.html" class="btn btn-card">Open Tool &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Creator Section -->
+        <section class="ai-creator-section" id="ai-assistant">
+            <div class="container">
+                <div class="ai-box-wrapper">
+                    <div class="ai-info">
+                        <div class="badge badge-accent">Preview</div>
+                        <h2>Your AI Creative Assistant</h2>
+                        <p>Turn ideas into better designs with intelligent creative assistance.</p>
+                        <div class="prompt-box">
+                            <span class="prompt-label">Example Prompt:</span>
+                            <div class="prompt-input-mock">
+                                <span>"Create a bold gaming thumbnail for a Minecraft video"</span>
+                                <button class="btn btn-sm btn-primary" disabled>Generate</button>
+                            </div>
+                        </div>
+                        <a href="./pages/about.html" class="btn btn-secondary">Explore AI Tools</a>
+                    </div>
+                    <div class="ai-preview-result">
+                        <div class="result-card">
+                            <div class="result-badge">AI Generated</div>
+                            <div class="result-mock-image">
+                                <span class="mock-text-bold">MINECRAFT SURVIVAL #1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-subtitle">Four simple steps to create content faster.</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-num">01</div>
+                        <h3>Choose a Tool</h3>
+                        <p>Select from our suite of content creation utilities.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">02</div>
+                        <h3>Create Your Design</h3>
+                        <p>Start with a blank canvas or choose a pre-made preset.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">03</div>
+                        <h3>Customize It</h3>
+                        <p>Adjust colors, text, layouts, and image visual parameters.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">04</div>
+                        <h3>Download & Share</h3>
+                        <p>Export in high-resolution digital formats ready for publishing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Section -->
+        <section class="features-section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">Built for Performance & Scale</h2>
+                    <p class="section-subtitle">Core platform fundamentals powering modern creators.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Easy-to-use editor</h3>
+                        <p>Clean controls designed for quick workflow iterations.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎨</div>
+                        <h3>Professional layouts</h3>
+                        <p>Standard aspect ratios tuned for digital social platforms.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📁</div>
+                        <h3>Multiple export formats</h3>
+                        <p>Export standard digital web formats seamlessly.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Creator-focused tools</h3>
+                        <p>Engineered to solve daily design production friction.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <h3>Responsive experience</h3>
+                        <p>Works smoothly across mobile devices, tablets, and desktops.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI-powered workflows</h3>
+                        <p>Smart automation layer planned to accelerate asset creation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Template Preview Section -->
+        <section class="templates-section" id="templates">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">Template Gallery Preview</h2>
+                    <p class="section-subtitle">Explore layout presets across core creator categories.</p>
+                </div>
+                <div class="template-tabs">
+                    <button class="tab-btn active" data-tab="youtube">YouTube</button>
+                    <button class="tab-btn" data-tab="instagram">Instagram</button>
+                    <button class="tab-btn" data-tab="business">Business</button>
+                    <button class="tab-btn" data-tab="gaming">Gaming</button>
+                </div>
+                <div class="template-grid" id="templateGrid">
+                    <!-- Template Item 1 -->
+                    <div class="template-card" data-category="youtube">
+                        <div class="template-thumb thumb-yt-1">
+                            <span>Top 10 Tech Tips</span>
+                        </div>
+                        <div class="template-meta">
+                            <h4>Tech Review Thumbnail</h4>
+                            <span class="badge-sm">16:9</span>
+                        </div>
+                    </div>
+                    <!-- Template Item 2 -->
+                    <div class="template-card" data-category="instagram">
+                        <div class="template-thumb thumb-ig-1">
+                            <span>DAILY QUOTE</span>
+                        </div>
+                        <div class="template-meta">
+                            <h4>Minimalist Story Preset</h4>
+                            <span class="badge-sm">9:16</span>
+                        </div>
+                    </div>
+                    <!-- Template Item 3 -->
+                    <div class="template-card" data-category="business">
+                        <div class="template-thumb thumb-biz-1">
+                            <span>GROWTH 2026</span>
+                        </div>
+                        <div class="template-meta">
+                            <h4>Corporate Promo Banner</h4>
+                            <span class="badge-sm">1:1</span>
+                        </div>
+                    </div>
+                    <!-- Template Item 4 -->
+                    <div class="template-card" data-category="gaming">
+                        <div class="template-thumb thumb-game-1">
+                            <span>LIV
