@@ -1,27 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Background Remover – CreatorForge AI</title>
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Background Remover – Remove Image Background Online | CreatorForge AI</title>
+  <meta name="description" content="Remove image backgrounds online with CreatorForge AI. Create transparent PNG images quickly with an easy browser-based background remover.">
+  <meta name="keywords" content="background remover, transparent PNG, remove image background, AI image processing, browser background remover">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="AI Background Remover | CreatorForge AI">
+  <meta property="og:description" content="Remove image backgrounds in seconds directly in your browser. Free, private, and high-resolution.">
+  <meta property="og:type" content="website">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Background Remover | CreatorForge AI">
+  <meta name="twitter:description" content="Remove image backgrounds instantly in your browser. 100% private client-side AI processing.">
+
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="remover.css">
+  
+  <!-- Client-side Background Removal Library (WASM / ONNX) -->
+  <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/dist/index.pkg.js"></script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../../index.html" class="brand-logo">
-                <span class="logo-text">CreatorForge <span class="accent-text">AI</span></span>
-            </a>
-            <a href="../../index.html" class="btn btn-secondary btn-sm">&larr; Back to Home</a>
+<body class="bg-dark text-light">
+
+  <!-- Header / Navigation -->
+  <header class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top border-bottom border-secondary-subtle">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4 text-gradient" href="../../index.html">CreatorForge AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-menu ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="../../index.html#tools">All Tools</a></li>
+          <li class="nav-item"><a class="nav-link" href="../thumbnail/index.html">Thumbnail Maker</a></li>
+          <li class="nav-item"><a class="nav-link" href="../social-post/index.html">Social Post Maker</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html">Background Remover</a></li>
+          <li class="nav-item"><a class="nav-link" href="../image-converter/index.html">Image Converter</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Main Tool Container -->
+  <main class="container py-5">
+    <div class="text-center mb-5">
+      <h1 class="display-4 fw-bold mb-3">AI Background Remover</h1>
+      <p class="lead text-secondary max-w-700 mx-auto">
+        Remove image backgrounds in seconds and download a clean transparent image. 
+        <span class="badge bg-success-subtle text-success border border-success ms-2">100% In-Browser & Private</span>
+      </p>
+    </div>
+
+    <!-- Upload Card -->
+    <div id="uploadCard" class="card card-custom p-4 text-center max-w-800 mx-auto">
+      <div id="dropZone" class="drop-zone py-5 px-3 border border-2 border-dashed rounded-3">
+        <div class="mb-3">
+          <svg width="64" height="64" fill="currentColor" class="text-accent" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+          </svg>
         </div>
-    </header>
-    <main class="container" style="padding: 6rem 1.5rem; text-align: center;">
-        <div class="badge">Phase 3 Module</div>
-        <h1 style="font-size: 2.5rem; margin-top: 1rem;">AI Background Remover</h1>
-        <p style="color: var(--text-muted); margin-top: 1rem;">Image isolation features are scheduled for implementation in Phase 3.</p>
-        <a href="../../index.html" class="btn btn-primary" style="margin-top: 2rem;">Return to Homepage</a>
-    </main>
+        <h3 class="h5 fw-semibold mb-2">Drag &amp; Drop Image Here</h3>
+        <p class="text-muted small mb-3">Supported formats: PNG, JPG, JPEG, WEBP (Max 12MB recommended)</p>
+        <label for="imageInput" class="btn btn-primary btn-lg px-4 cursor-pointer">
+          Select Image
+          <input type="file" id="imageInput" class="d-none" accept="image/png, image/jpeg, image/webp">
+        </label>
+      </div>
+      <div class="mt-3 text-start small text-muted">
+        <p class="mb-1">🔒 <strong>Privacy Assurance:</strong> Your image is processed locally in your browser using WebAssembly AI models. No images are uploaded to any external server.</p>
+      </div>
+    </div>
+
+    <!-- Progress Indicator State -->
+    <div id="progressCard" class="card card-custom p-5 text-center max-w-800 mx-auto d-none">
+      <div class="spinner-border text-primary mx-auto mb-3" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <h3 id="progressStatus" class="h5 fw-semibold mb-2">Preparing AI Model...</h3>
+      <p class="text-muted small mb-3">First run may download model weights (~25MB). Subsequent removals are instant.</p>
+      <div class="progress max-w-500 mx-auto" style="height: 10px;">
+        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-accent" role="progressbar" style="width: 15%"></div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorCard" class="alert alert-danger max-w-800 mx-auto mt-4 d-none" role="alert">
+      <h4 class="alert-heading h5 fw-bold" id="errorTitle">Processing Error</h4>
+      <p id="errorMessage" class="mb-2">An error occurred while attempting to remove the background.</p>
+      <button id="errorRetryBtn" class="btn btn-outline-danger btn-sm">Try Again</button>
+    </div>
+
+    <!-- Result Area -->
+    <div id="resultCard" class="card card-custom p-4 max-w-1000 mx-auto d-none">
+      <div class="row g-4 align-items-center">
+        <!-- Comparisons -->
+        <div class="col-md-6 text-center">
+          <span class="badge bg-secondary mb-2">Original</span>
+          <div class="preview-container border rounded p-2 bg-dark-subtle">
+            <img id="originalPreview" src="" alt="Original Image" class="img-fluid rounded">
+          </div>
+        </div>
+
+        <div class="col-md-6 text-center">
+          <span class="badge bg-success mb-2">Background Removed</span>
+          <div id="resultWrapper" class="preview-container border rounded p-2 checkerboard-bg">
+            <img id="resultPreview" src="" alt="Transparent Result" class="img-fluid rounded">
+          </div>
+        </div>
+      </div>
+
+      <!-- Background Options -->
+      <div class="mt-4 pt-3 border-top border-secondary">
+        <h4 class="h6 fw-bold mb-3">Background Color Options:</h4>
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
+          <button class="btn btn-outline-light btn-sm bg-option active" data-bg="transparent">Checkerboard (Transparent)</button>
+          <button class="btn btn-outline-light btn-sm bg-option" data-bg="white">White</button>
+          <button class="btn btn-outline-light btn-sm bg-option" data-bg="black">Black</button>
+          <div class="d-flex align-items-center gap-2 ms-md-2">
+            <label for="customColorPicker" class="small text-muted mb-0">Custom Color:</label>
+            <input type="color" id="customColorPicker" class="form-control form-control-color" value="#3b82f6" title="Choose background color">
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-wrap gap-3">
+          <button id="downloadBtn" class="btn btn-success btn-lg px-4">
+            Download Transparent PNG
+          </button>
+          <button id="tryAnotherBtn" class="btn btn-outline-light btn-lg px-4">
+            Try Another Image
+          </button>
+          <a href="../image-converter/index.html" class="btn btn-link text-light align-self-center text-decoration-none">
+            Need to convert format? Try Image Converter &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explanatory Content & FAQ for SEO -->
+    <section class="mt-5 pt-5 max-w-800 mx-auto">
+      <h2 class="h3 fw-bold mb-4 text-gradient">About AI Background Removal</h2>
+      <p class="text-secondary">
+        Our browser-native AI Background Remover utilizes WebAssembly and neural networks directly within your browser window. By utilizing client-side execution, your photographs never leave your laptop or smartphone, giving you unmatched privacy and real-time processing capabilities without subscriptions or watermark limitations.
+      </p>
+
+      <h3 class="h4 fw-bold mt-5 mb-3">Frequently Asked Questions</h3>
+      <div class="accordion accordion-flush" id="faqAccordion">
+        <div class="accordion-item bg-transparent text-light border-bottom border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+              How does a background remover work?
+            </button>
+          </h2>
+          <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-secondary">
+              It uses a deep learning segmentation model trained to separate foreground subjects (people, products, animals) from background elements by predicting object contours at the pixel level.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent text-light border-bottom border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+              Can I remove a background from a JPG?
+            </button>
+          </h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-secondary">
+              Yes! You can upload JPG, JPEG, PNG, or WEBP files. The tool processes the input and automatically outputs a transparent PNG file.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent text-light border-bottom border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+              Does the image keep its original resolution?
+            </button>
+          </h2>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-secondary">
+              Yes, our client-side processing engine generates full-resolution cutout masks up to standard browser memory thresholds without downscaling unnecessarily.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent text-light border-bottom border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+              Is my image uploaded to a server?
+            </button>
+          </h2>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-secondary">
+              No. Your image is processed 100% in your local browser environment. CreatorForge AI never stores, logs, or transmits your photos anywhere.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-secondary text-secondary py-4 border-top border-secondary-subtle mt-5">
+    <div class="container text-center">
+      <p class="small mb-0">&copy; 2026 CreatorForge AI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="remover.js"></script>
 </body>
 </html>
