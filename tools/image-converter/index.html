@@ -1,27 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNG ↔ JPG Converter – CreatorForge AI</title>
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PNG ↔ JPG Image Converter Online | CreatorForge AI</title>
+  <meta name="description" content="Convert PNG to JPG and JPG to PNG easily with CreatorForge AI. Free, fast, client-side batch converting with quality controls and privacy assurance.">
+  <meta name="keywords" content="PNG to JPG, JPG to PNG, image converter, batch image converter, client side image conversion">
+
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="converter.css">
+
+  <!-- JSZip for Client-side Batch Downloads -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
-<body>
-    <header class="navbar">
-        <div class="container nav-container">
-            <a href="../../index.html" class="brand-logo">
-                <span class="logo-text">CreatorForge <span class="accent-text">AI</span></span>
-            </a>
-            <a href="../../index.html" class="btn btn-secondary btn-sm">&larr; Back to Home</a>
+<body class="bg-dark text-light">
+
+  <!-- Navigation Bar -->
+  <header class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top border-bottom border-secondary-subtle">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4 text-gradient" href="../../index.html">CreatorForge AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-menu ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="../../index.html#tools">All Tools</a></li>
+          <li class="nav-item"><a class="nav-link" href="../thumbnail/index.html">Thumbnail Maker</a></li>
+          <li class="nav-item"><a class="nav-link" href="../social-post/index.html">Social Post Maker</a></li>
+          <li class="nav-item"><a class="nav-link" href="../background-remover/index.html">Background Remover</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html">Image Converter</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-5">
+    <div class="text-center mb-5">
+      <h1 class="display-4 fw-bold mb-3">PNG to JPG &amp; JPG to PNG Converter</h1>
+      <p class="lead text-secondary max-w-700 mx-auto">
+        Convert your image formats quickly right inside your browser. No files are uploaded to any server.
+      </p>
+    </div>
+
+    <!-- Mode Selector & Upload Area -->
+    <div class="card card-custom p-4 max-w-900 mx-auto mb-4">
+      <div class="row align-items-center mb-4">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <label class="form-label fw-bold">Target Conversion Mode:</label>
+          <select id="conversionMode" class="form-select bg-dark text-light border-secondary">
+            <option value="PNG_TO_JPG">PNG → JPG (With Background Color Control)</option>
+            <option value="JPG_TO_PNG">JPG / WEBP → PNG (Preserves Format Quality)</option>
+          </select>
         </div>
-    </header>
-    <main class="container" style="padding: 6rem 1.5rem; text-align: center;">
-        <div class="badge">Phase 3 Module</div>
-        <h1 style="font-size: 2.5rem; margin-top: 1rem;">PNG ↔ JPG Converter</h1>
-        <p style="color: var(--text-muted); margin-top: 1rem;">Client-side image processing pipelines are scheduled for implementation in Phase 3.</p>
-        <a href="../../index.html" class="btn btn-primary" style="margin-top: 2rem;">Return to Homepage</a>
-    </main>
+        <div class="col-md-6" id="qualityControlContainer">
+          <label for="jpgQuality" class="form-label fw-bold d-flex justify-content-between">
+            <span>JPG Compression Quality:</span>
+            <span id="qualityVal" class="text-accent">90%</span>
+          </label>
+          <input type="range" class="form-range" id="jpgQuality" min="10" max="100" value="90">
+        </div>
+      </div>
+
+      <!-- PNG to JPG Specific Transparency Warning -->
+      <div id="transparencyWarning" class="alert alert-info py-2 small mb-3">
+        ⚠️ <strong>Note:</strong> JPG format does not support transparency. Select a background fill color for transparent areas below.
+        <div class="d-flex align-items-center gap-3 mt-2">
+          <span>Background Fill:</span>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="bgFill" id="bgWhite" value="#ffffff" checked>
+            <label class="form-check-label" for="bgWhite">White</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="bgFill" id="bgBlack" value="#000000">
+            <label class="form-check-label" for="bgBlack">Black</label>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+            <input type="radio" class="form-check-input" name="bgFill" id="bgCustomRadio" value="custom">
+            <input type="color" id="bgCustomColor" class="form-control form-control-color form-control-sm" value="#3b82f6">
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Dropzone -->
+      <div id="dropZone" class="drop-zone py-5 px-3 border border-2 border-dashed rounded-3 text-center">
+        <svg width="56" height="56" fill="currentColor" class="text-accent mb-3" viewBox="0 0 16 16">
+          <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.483C1.71 6.205 1 7.5 1 9a4.5 4.5 0 0 0 4.5 4.5h9A3.5 3.5 0 0 0 18 10a3.5 3.5 0 0 0-3-3.45 5.5 5.5 0 0 0-7-4.55z"/>
+          <path d="M7.646 6.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.207V11.5a.5.5 0 0 1-1 0V8.207L6.354 9.354a.5.5 0 1 1-.708-.708l2-2z"/>
+        </svg>
+        <h3 class="h5 fw-semibold mb-2">Drag &amp; Drop Image File(s) Here</h3>
+        <p class="text-muted small mb-3">Supports PNG, JPG, JPEG, and WEBP. (Multiple files supported)</p>
+        <label for="imageInput" class="btn btn-primary px-4 cursor-pointer">
+          Select Images
+          <input type="file" id="imageInput" class="d-none" accept="image/png, image/jpeg, image/webp" multiple>
+        </label>
+      </div>
+    </div>
+
+    <!-- Batch Item List & Preview -->
+    <div id="conversionListCard" class="card card-custom p-4 max-w-900 mx-auto d-none">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="h5 fw-bold mb-0">Conversion Queue (<span id="queueCount">0</span>)</h3>
+        <div class="gap-2 d-flex">
+          <button id="convertAllBtn" class="btn btn-success btn-sm">Convert All</button>
+          <button id="downloadZipBtn" class="btn btn-outline-light btn-sm d-none">Download All (ZIP)</button>
+          <button id="clearAllBtn" class="btn btn-outline-danger btn-sm">Clear Queue</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-dark align-middle">
+          <thead>
+            <tr>
+              <th>Preview</th>
+              <th>Name</th>
+              <th>Original Size</th>
+              <th>Dimensions</th>
+              <th>Converted Size</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="conversionTableBody">
+            <!-- Dynamic Conversion Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SEO & FAQ Section -->
+    <section class="mt-5 pt-5 max-w-800 mx-auto">
+      <h2 class="h3 fw-bold mb-4 text-gradient">Fast Client-Side Image Conversion</h2>
+      <p class="text-secondary">
+        CreatorForge AI's Image Converter uses HTML5 Canvas API to perform hardware-accelerated image conversion inside your browser. No server uploads means zero bandwidth delay, absolute file privacy, and instant batch processing capability.
+      </p>
+
+      <h3 class="h4 fw-bold mt-5 mb-3">Frequently Asked Questions</h3>
+      <div class="accordion accordion-flush" id="faqConverter">
+        <div class="accordion-item bg-transparent text-light border-bottom border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#cfaq1">
+              Why do transparent areas turn white when converting PNG to JPG?
+            </button>
+          </h2>
+          <div id="cfaq1" class="accordion-collapse collapse" data-bs-parent="#faqConverter">
+            <div class="accordion-body text-secondary">
+              The JPG format does not contain an alpha channel (transparency). Therefore, transparent background pixels must be replaced with a solid fill color (such as white or black).
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item bg-transparent text-light border-bottom border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#cfaq2">
+              Need a transparent cutout instead?
+            </button>
+          </h2>
+          <div id="cfaq2" class="accordion-collapse collapse" data-bs-parent="#faqConverter">
+            <div class="accordion-body text-secondary">
+              Check out our <a href="../background-remover/index.html" class="text-accent">AI Background Remover</a> to automatically extract subjects and create clean transparent PNGs.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-secondary text-secondary py-4 border-top border-secondary-subtle mt-5">
+    <div class="container text-center">
+      <p class="small mb-0">&copy; 2026 CreatorForge AI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="converter.js"></script>
 </body>
 </html>
